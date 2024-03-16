@@ -6,8 +6,8 @@ class BlogPost extends Model {
 	public title!: string
 	public description!: string
 	public content!: string
-	public readonly createdAt!: Date
-	public readonly updatedAt!: Date
+	public readonly createdat!: Date
+	public readonly updatedat!: Date
 }
 
 BlogPost.init(
@@ -29,13 +29,13 @@ BlogPost.init(
 			type: new DataTypes.TEXT(),
 			allowNull: false,
 		},
-		createdAt: {
+		createdat: {
 			type: new DataTypes.DATE(),
-			allowNull: false,
+			allowNull: true,
 		},
-		updatedAt: {
+		updatedat: {
 			type: new DataTypes.DATE(),
-			allowNull: false,
+			allowNull: true,
 		},
 	},
 	{
