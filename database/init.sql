@@ -1,0 +1,22 @@
+CREATE TABLE blogposts (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(128) NOT NULL,
+    description VARCHAR(256) NOT NULL,
+    content TEXT NOT NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE FUNCTION update_timestamp_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW."updatedAt" = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_timestamp
+BEFORE UPDATE ON blogposts
+FOR EACH ROW
+EXECUTE PROCEDURE update_timestamp_column();
+

@@ -1,0 +1,65 @@
+# version: "3"
+
+# networks:
+#     default:
+
+# services:
+
+# database:
+#     build:
+#         context: ./database
+#         dockerfile: Dockerfile
+#     volumes:
+#         - ./backup:/var/lib/postgresql/data
+#     networks:
+#         - default
+#     environment:
+#         - POSTGRES_USER= postgresql
+#         - POSTGRES_DB= postgresql
+#         - POSTGRES_PASSWORD= postgresql
+#     healthcheck:
+#         test: ["CMD-SHELL", "pg_isready -U postgresql"]
+#         interval: 30s
+#         timeout: 30s
+#         retries: 3
+#     restart: on-failure
+
+version: "3"
+
+services:
+    database:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: freddb
+        ports:
+            - "5432:5432"
+        volumes:
+            - db_data:/var/lib/postgresql/data
+            - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+        networks:
+            - site
+        healthcheck:
+            test: ["CMD-SHELL", "sleep 10 && pg_isready -U postgres"]
+            interval: 10s
+            retries: 5
+
+    rest:
+        build:
+            context: ./rest
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        depends_on:
+            - database
+        networks:
+            - site
+        restart: on-failure:5
+
+networks:
+    site:
+
+volumes:
+    db_data:
