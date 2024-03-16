@@ -29,6 +29,14 @@ BlogPost.init(
 			type: new DataTypes.TEXT(),
 			allowNull: false,
 		},
+		createdAt: {
+			type: new DataTypes.DATE(),
+			allowNull: false,
+		},
+		updatedAt: {
+			type: new DataTypes.DATE(),
+			allowNull: false,
+		},
 	},
 	{
 		tableName: "blogposts",
