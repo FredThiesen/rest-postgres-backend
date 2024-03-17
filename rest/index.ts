@@ -14,7 +14,7 @@ const httpsOptions = {
 		"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem"
 	),
 	cert: fs.readFileSync(
-		"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/cert.pem"
+		"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/fullchain.pem"
 	),
 }
 
