@@ -6,9 +6,16 @@ import { BlogPost } from "./models/BlogPost" // Assuming you have a BlogPost mod
 import { isEmpty } from "lodash"
 import { Op } from "sequelize"
 
+// Certificate is saved at: /etc/letsencrypt/live/ricardothiesenapi.sytes.net/fullchain.pem
+// Key is saved at:         /etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem
+
 const httpsOptions = {
-	key: fs.readFileSync("./key.pem"),
-	cert: fs.readFileSync("./cert.pem"),
+	key: fs.readFileSync(
+		"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem"
+	),
+	cert: fs.readFileSync(
+		"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/fullchain.pem"
+	),
 }
 
 const app = express()
