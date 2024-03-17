@@ -7,8 +7,8 @@ import { isEmpty } from "lodash"
 import { Op } from "sequelize"
 
 const httpsOptions = {
-	key: fs.readFileSync("../key.pem"),
-	cert: fs.readFileSync("../cert.pem"),
+	key: fs.readFileSync("./key.pem"),
+	cert: fs.readFileSync("./cert.pem"),
 }
 
 const app = express()
