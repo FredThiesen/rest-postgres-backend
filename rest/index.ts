@@ -10,12 +10,8 @@ import { Op } from "sequelize"
 // Key is saved at:         /etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem
 
 const httpsOptions = {
-	key: fs.readFileSync(
-		"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem"
-	),
-	cert: fs.readFileSync(
-		"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/fullchain.pem"
-	),
+	key: fs.readFileSync("privkey.pem"),
+	cert: fs.readFileSync("fullchain.pem"),
 }
 
 const app = express()
