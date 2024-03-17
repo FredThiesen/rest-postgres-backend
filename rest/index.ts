@@ -17,7 +17,7 @@ const httpsOptions = {
 const app = express()
 
 const corsOptions = {
-	origin: ["https://ricardothiesen.com.br"],
+	origin: ["localhost:3000", "https://ricardothiesen.com.br"],
 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 	preflightContinue: false,
 	credentials: true,
