@@ -1,13 +1,20 @@
 import express, { Request, Response } from "express"
+import https from "https"
+import fs from "fs"
 import cors from "cors"
 import { BlogPost } from "./models/BlogPost" // Assuming you have a BlogPost model defined
 import { isEmpty } from "lodash"
 import { Op } from "sequelize"
 
+const httpsOptions = {
+	key: fs.readFileSync("../key.pem"),
+	cert: fs.readFileSync("../cert.pem"),
+}
+
 const app = express()
 
 const corsOptions = {
-	origin: ["http://localhost", "https://ricardothiesen.com.br"],
+	origin: ["https://ricardothiesen.com.br"],
 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 	preflightContinue: false,
 	credentials: true,
@@ -19,10 +26,6 @@ app.use(express.json())
 
 app.get("/", (req: Request, res: Response) => {
 	res.send("Hello World!")
-})
-
-app.listen(3000, () => {
-	console.log("Server is running on port 3000")
 })
 
 app.post("/posts/blog", (req: Request, res: Response) => {
@@ -91,4 +94,10 @@ app.get("/posts/blog/search", (req: Request, res: Response) => {
 			console.error("Error getting blog posts:", error)
 			res.status(500).send({ error: "Error getting blog posts" })
 		})
+})
+
+const server = https.createServer(httpsOptions, app)
+
+server.listen(3000, () => {
+	console.log("Server running on port 3000")
 })
