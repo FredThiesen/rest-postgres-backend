@@ -8,8 +8,6 @@ services:
             POSTGRES_USER: freduser
             POSTGRES_PASSWORD: freduserpassword
             POSTGRES_DB: freddb
-        ports:
-            - "5432:5432"
         volumes:
             - db_data:/var/lib/postgresql/data
             - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -24,13 +22,58 @@ services:
         build:
             context: ./rest
             dockerfile: Dockerfile
-        ports:
-            - "3000:3000"
         depends_on:
             - database
         networks:
             - site
+        container_name: rest
+        ports:
+            - "3001:3000"
         restart: on-failure:5
+
+    # rest2:
+    #     build:
+    #         context: ./rest
+    #         dockerfile: Dockerfile
+    #     depends_on:
+    #         - database
+    #     networks:
+    #         - site
+    #     container_name: rest2
+    #     ports:
+    #         - "3002:3000"
+    #     restart: on-failure:5
+
+    # rest3:
+    #     build:
+    #         context: ./rest
+    #         dockerfile: Dockerfile
+    #     depends_on:
+    #         - database
+    #     networks:
+    #         - site
+    #     container_name: rest3
+    #     ports:
+    #         - "3003:3000"
+    #     restart: on-failure:5
+
+    nginx:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+        ports:
+            - "9090:80"
+            # - "443:443"
+        volumes:
+            - ./nginx/certs:/etc/nginx/certs // Added volume for SSL certificates
+            - ./nginx/logs:/var/log/nginx
+        depends_on:
+            - rest
+            # - rest2
+            # - rest3
+        networks:
+            - site
+        restart: always
 
 networks:
     site:

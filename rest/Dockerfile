@@ -1,6 +1,16 @@
 # Use an official Node.js runtime as the base image
 FROM node:20
 
+# define the env variables DB_HOST, DB_USER, DB_PASS, DB_NAME, ORIGIN, ENVIRONMENT
+ENV DB_HOST=database
+ENV DB_USER=freduser
+ENV DB_PASS=freduserpassword
+ENV DB_NAME=freddb
+ENV ORIGIN=http://localhost
+#ENV ORIGIN=https://ricardothiesen.com.br
+ENV ENVIRONMENT=development
+#ENV ENVIRONMENT=production
+
 # Set the working directory in the container to /app
 WORKDIR /app
 

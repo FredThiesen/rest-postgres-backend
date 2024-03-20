@@ -6,24 +6,35 @@ import { BlogPost } from "./models/BlogPost" // Assuming you have a BlogPost mod
 import { isEmpty } from "lodash"
 import { Op } from "sequelize"
 
+//get envs and assign to some variable
+const { DB_HOST, DB_USER, DB_PASS, DB_NAME, ORIGIN, ENVIRONMENT } = process.env
+
 // Certificate is saved at: /etc/letsencrypt/live/ricardothiesenapi.sytes.net/fullchain.pem
 // Key is saved at:         /etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem
 
-const httpsOptions = {
-	key: fs.readFileSync("privkey.pem"),
-	cert: fs.readFileSync("fullchain.pem"),
+let httpsOptions = {}
+if (ENVIRONMENT === "production") {
+	httpsOptions = {
+		key: fs.readFileSync(
+			"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem"
+		),
+		cert: fs.readFileSync(
+			"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/fullchain.pem"
+		),
+	}
 }
 
 const app = express()
 
 const corsOptions = {
-	origin: ["localhost:3000", "https://ricardothiesen.com.br"],
+	origin: ["*"],
 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 	preflightContinue: false,
 	credentials: true,
 	allowedHeaders: "Content-Type, Authorization, X-Requested-With",
 }
 
+//@ts-ignore
 app.use(cors(corsOptions))
 app.use(express.json())
 
@@ -99,8 +110,14 @@ app.get("/posts/blog/search", (req: Request, res: Response) => {
 		})
 })
 
-const server = https.createServer(httpsOptions, app)
+if (ENVIRONMENT === "production") {
+	const server = https.createServer(httpsOptions, app)
 
-server.listen(3000, () => {
-	console.log("Server running on port 3000")
-})
+	server.listen(3000, () => {
+		console.log("Server running on port 3000")
+	})
+} else {
+	app.listen(3000, () => {
+		console.log("Server running on port 3000")
+	})
+}
