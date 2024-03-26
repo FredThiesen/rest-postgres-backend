@@ -4,15 +4,10 @@ services:
     database:
         image: postgres
         restart: always
-        environment:
-            POSTGRES_USER: freduser
-            POSTGRES_PASSWORD: freduserpassword
-            POSTGRES_DB: freddb
+        env_file:
+            - .env
         volumes:
-            - db_data:/var/lib/postgresql/data
-            - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-        networks:
-            - site
+            - pg_data:/var/lib/postgresql/data
         healthcheck:
             test: ["CMD-SHELL", "sleep 10 && pg_isready -U postgres"]
             interval: 10s
@@ -21,62 +16,47 @@ services:
     rest:
         build:
             context: ./rest
-            dockerfile: Dockerfile
+        env_file:
+            - .env
         depends_on:
             - database
-        networks:
-            - site
         container_name: rest
-        ports:
-            - "3001:3000"
-        restart: on-failure:5
+        restart: unless-stopped
 
-    # rest2:
-    #     build:
-    #         context: ./rest
-    #         dockerfile: Dockerfile
-    #     depends_on:
-    #         - database
-    #     networks:
-    #         - site
-    #     container_name: rest2
-    #     ports:
-    #         - "3002:3000"
-    #     restart: on-failure:5
+    rest2:
+        build:
+            context: ./rest
+        env_file:
+            - .env
+        depends_on:
+            - database
+        container_name: rest2
+        restart: unless-stopped
 
-    # rest3:
-    #     build:
-    #         context: ./rest
-    #         dockerfile: Dockerfile
-    #     depends_on:
-    #         - database
-    #     networks:
-    #         - site
-    #     container_name: rest3
-    #     ports:
-    #         - "3003:3000"
-    #     restart: on-failure:5
+    rest3:
+        build:
+            context: ./rest
+        env_file:
+            - .env
+        depends_on:
+            - database
+        container_name: rest3
+        restart: unless-stopped
 
     nginx:
         build:
             context: ./nginx
             dockerfile: Dockerfile
+        env_file:
+            - .env
         ports:
-            - "9090:80"
-            # - "443:443"
+            - "9090:9090"
         volumes:
-            - ./nginx/certs:/etc/nginx/certs // Added volume for SSL certificates
+            - ./nginx/certs:/etc/nginx/certs
             - ./nginx/logs:/var/log/nginx
         depends_on:
             - rest
-            # - rest2
-            # - rest3
-        networks:
-            - site
-        restart: always
-
-networks:
-    site:
+        restart: unless-stopped
 
 volumes:
-    db_data:
+    pg_data:

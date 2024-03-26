@@ -7,7 +7,7 @@ import { isEmpty } from "lodash"
 import { Op } from "sequelize"
 
 //get envs and assign to some variable
-const { DB_HOST, DB_USER, DB_PASS, DB_NAME, ORIGIN, ENVIRONMENT } = process.env
+const { ENVIRONMENT } = process.env
 
 // Certificate is saved at: /etc/letsencrypt/live/ricardothiesenapi.sytes.net/fullchain.pem
 // Key is saved at:         /etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem
@@ -108,6 +108,10 @@ app.get("/posts/blog/search", (req: Request, res: Response) => {
 			console.error("Error getting blog posts:", error)
 			res.status(500).send({ error: "Error getting blog posts" })
 		})
+})
+
+BlogPost.sync().then(() => {
+	console.log("BlogPost table created")
 })
 
 if (ENVIRONMENT === "production") {
