@@ -20,6 +20,8 @@ services:
             - .env
         depends_on:
             - database
+        volumes:
+            - ./certs:/etc/ssl/certs
         container_name: rest
         restart: unless-stopped
 
@@ -30,6 +32,8 @@ services:
             - .env
         depends_on:
             - database
+        volumes:
+            - ./certs:/etc/ssl/certs
         container_name: rest2
         restart: unless-stopped
 
@@ -40,6 +44,8 @@ services:
             - .env
         depends_on:
             - database
+        volumes:
+            - ./certs:/etc/ssl/certs
         container_name: rest3
         restart: unless-stopped
 

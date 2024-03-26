@@ -15,12 +15,8 @@ const { ENVIRONMENT } = process.env
 let httpsOptions = {}
 if (ENVIRONMENT === "production") {
 	httpsOptions = {
-		key: fs.readFileSync(
-			"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/privkey.pem"
-		),
-		cert: fs.readFileSync(
-			"/etc/letsencrypt/live/ricardothiesenapi.sytes.net/fullchain.pem"
-		),
+		key: fs.readFileSync("/etc/ssl/certs/privkey.pem"),
+		cert: fs.readFileSync("/etc/ssl/certs/fullchain.pem"),
 	}
 }
 
