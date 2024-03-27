@@ -21,7 +21,7 @@ services:
         depends_on:
             - database
         volumes:
-            - ./certs:/etc/ssl/certs
+            - ./certbot/conf:/etc/letsencrypt:ro
         container_name: rest
         restart: unless-stopped
 
@@ -33,7 +33,7 @@ services:
         depends_on:
             - database
         volumes:
-            - ./certs:/etc/ssl/certs
+            - ./certbot/conf:/etc/letsencrypt:ro
         container_name: rest2
         restart: unless-stopped
 
@@ -45,7 +45,7 @@ services:
         depends_on:
             - database
         volumes:
-            - ./certs:/etc/ssl/certs
+            - ./certbot/conf:/etc/letsencrypt:ro
         container_name: rest3
         restart: unless-stopped
 
@@ -56,13 +56,20 @@ services:
         env_file:
             - .env
         ports:
-            - "9090:9090"
+            - "80:80"
+            - "443:443"
         volumes:
-            - ./certs:/etc/ssl/certs
-            - ./nginx/logs:/var/log/nginx
+            - ./certbot/www:/var/www/certbot/:ro
+            - ./certbot/conf/:/etc/nginx/ssl/:ro
         depends_on:
             - rest
         restart: unless-stopped
+
+    certbot:
+        image: certbot/certbot:latest
+        volumes:
+            - ./certbot/www/:/var/www/certbot/:rw
+            - ./certbot/conf/:/etc/letsencrypt/:rw
 
 volumes:
     pg_data:
