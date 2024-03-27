@@ -21,7 +21,7 @@ services:
         depends_on:
             - database
         volumes:
-            - ./certs:/etc/ssl/certs
+            - /etc/letsencrypt/live/ricardothiesenapi.sytes.net:/etc/ssl/certs
         container_name: rest
         restart: unless-stopped
 
@@ -33,7 +33,7 @@ services:
         depends_on:
             - database
         volumes:
-            - ./certs:/etc/ssl/certs
+            - /etc/letsencrypt/live/ricardothiesenapi.sytes.net:/etc/ssl/certs
         container_name: rest2
         restart: unless-stopped
 
@@ -45,7 +45,7 @@ services:
         depends_on:
             - database
         volumes:
-            - ./certs:/etc/ssl/certs
+            - /etc/letsencrypt/live/ricardothiesenapi.sytes.net:/etc/ssl/certs
         container_name: rest3
         restart: unless-stopped
 
@@ -58,7 +58,7 @@ services:
         ports:
             - "9090:9090"
         volumes:
-            - ./nginx/certs:/etc/nginx/certs
+            - /etc/letsencrypt/live/ricardothiesenapi.sytes.net:/etc/nginx/certs
             - ./nginx/logs:/var/log/nginx
         depends_on:
             - rest
