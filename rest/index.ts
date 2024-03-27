@@ -27,7 +27,7 @@ if (ENVIRONMENT === "production") {
 const app = express()
 
 const corsOptions = {
-	origin: ["*"],
+	origin: ["https://ricardothiesen.com.br"], // specify the allowed origin
 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 	preflightContinue: false,
 	credentials: true,
